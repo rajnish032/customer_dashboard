@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://aero2-astro-data-processing.vercel.app
+
+# Sitemaps
+Sitemap: https://aero2-astro-data-processing.vercel.app/sitemap.xml

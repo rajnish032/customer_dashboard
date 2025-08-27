@@ -138,7 +138,7 @@ const AgentSideBar = () => {
                 Project List
               </Link>
               <Link
-                href={`/agent/project/applicant/${currentUser?.fullName
+                href={`/agent/projects/applicant/${currentUser?.fullName
                   ?.toLowerCase()
                   ?.replace(" ", "-")}`}
                 className={`my-1 p-2 rounded-md text-gray-200 text-sm ${
@@ -202,11 +202,11 @@ const AgentSideBar = () => {
                 Job List
               </Link>
               <Link
-                href={`/agent/job/applicant/${currentUser?.fullName
+                href={`/agent/postjob/applicant/${currentUser?.fullName
                   ?.toLowerCase()
                   ?.replace(" ", "-")}`}
                 className={`my-1 p-2 rounded-md text-gray-200 text-sm ${
-                  pathname.includes("/job/applicant")
+                  pathname.includes("/postjob/applicant")
                     ? "bg-stone-500 text-white"
                     : "hover:bg-stone-600"
                 }`}

@@ -51,14 +51,32 @@ const AddJob = ({ setIsOpen, getAllJob, setAgentJob }) => {
     setPreviewUrl(null);
   };
 
+   const validateInputs = () => {
+    // Phone number: only digits, 10 digits (India format example)
+    const phoneRegex = /^[0-9]{10}$/;
+    // Email: basic email regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!phoneRegex.test(formData.phoneNumber)) {
+      toast.error("Please enter a valid 10-digit phone number");
+      return false;
+    }
+    if (!emailRegex.test(formData.email)) {
+      toast.error("Please enter a valid email address");
+      return false;
+    }
+    if (new Date(formData.date) < new Date()) {
+      toast.error("Job date cannot be in the past");
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validation
-    if (new Date(formData.date) < new Date()) {
-      toast.error("Job date cannot be in the past");
-      return;
-    }
+    if(!validateInputs()) return;
 
     const token = cookies.get("auth");
     if (!token) {
@@ -101,6 +119,8 @@ const AddJob = ({ setIsOpen, getAllJob, setAgentJob }) => {
         salary: "",
         industrytype: "Drone_Pilot",
         category: "Full-time",
+         phoneNumber: "",
+         email: "",
         jobsummary: "",
       });
       setSelectedFile(null);
@@ -298,6 +318,37 @@ const AddJob = ({ setIsOpen, getAllJob, setAgentJob }) => {
           </div>
         </div>
 
+         {/* Phone Number & Email */}
+        <div className="grid md:grid-cols-2 gap-4">
+          <div>
+            <label className="font-medium text-gray-700">
+              Phone Number <RequiredStar />
+            </label>
+            <input
+              name="phoneNumber"
+              value={formData.phoneNumber}
+              required
+              placeholder="Enter 10-digit phone number"
+              className={inputClass}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label className="font-medium text-gray-700">
+              Email <RequiredStar />
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              required
+              placeholder="Enter valid email address"
+              className={inputClass}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+        
         {/* Job Summary */}
         <div>
           <label className="font-medium text-gray-700">
@@ -319,7 +370,7 @@ const AddJob = ({ setIsOpen, getAllJob, setAgentJob }) => {
           <button
             type="submit"
             disabled={loader}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition disabled:opacity-50"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition disabled:opacity-50 mb-5"
           >
             {loader ? "Posting..." : "Post Job"}
           </button>

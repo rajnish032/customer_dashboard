@@ -7,9 +7,9 @@ import { uploadImageToCloudinary } from "../utils/cloudinary.js";
 
 
 export const addNewJob = expressAsyncHandler(async (req, res) => {
-  const { title, subtitle, date, location, companyname, jobtype, salary, industrytype, category, jobsummary } = req.body;
+  const { title, subtitle, date, location, companyname, jobtype, salary, industrytype, category, jobsummary, phoneNumber,email } = req.body;
 
-  if (!title || !subtitle || !date || !location || !companyname || !jobtype || !salary || !industrytype || !category || !jobsummary) {
+  if (!title || !subtitle || !date || !location || !companyname || !jobtype || !salary || !industrytype || !category || !jobsummary ||!phoneNumber ||!email) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
@@ -39,6 +39,8 @@ export const addNewJob = expressAsyncHandler(async (req, res) => {
       industrytype,
       category,
       jobsummary,
+       phoneNumber,
+      email
     });
 
     if (!newJob) {

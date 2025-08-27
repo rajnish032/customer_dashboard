@@ -79,6 +79,29 @@ const agentProject = new mongoose.Schema({
         enum: ['approved', 'rejected', 'pending', "review"],
         default: 'pending',
     },
+
+     phoneNumber: {
+  type: Number,
+  required:true,
+  validate: {
+    validator: function (v) {
+      // check 10-digit phone number
+      return /^[0-9]{10}$/.test(v.toString());
+    },
+    message: props => `${props.value} is not a valid phone number!`,
+  },
+},
+
+email: {
+  type: String,
+  required:true,
+  lowercase: true,
+  trim: true,
+  match: [
+    /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+    "Please fill a valid email address",
+  ],
+},
     
    
 

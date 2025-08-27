@@ -2,11 +2,11 @@
 
 "use client";
 import React, { useState } from "react";
-import { IoLocation, IoPricetag } from "react-icons/io5";
-import { FaClockRotateLeft } from "react-icons/fa6";
+import { IoLocation,IoCalendar, IoPricetag, IoReceipt, IoFolder } from "react-icons/io5";
+import { FaTools, FaIndustry, FaTasks } from "react-icons/fa";
+
 import { Card, CardHeader, CardBody, Image } from "@nextui-org/react";
-import { TbDeviceRemote } from "react-icons/tb";
-import { GiDeliveryDrone } from "react-icons/gi";
+
 import { TiDelete } from "react-icons/ti";
 import { MdFileDownload } from "react-icons/md";
 import dayjs from "dayjs";
@@ -39,86 +39,128 @@ const ProjectCard = ({ project, projId, handleDelete }) => {
     <>
       <DelModal isOpen={isModalOpen} handleDelete={confirmDelete} handleClose={closeModal} />
           
-      <Card className="relative hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border rounded-xl overflow-hidden ">
+      <Card className="relative hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border rounded-xl overflow-hidden w-full max-w-md">
         {/* Header */}
         <CardHeader className="flex justify-between items-start p-4 bg-gray-50 border-b">
-          <div>
+          <div className="flex-1">
             <h4 className="font-bold text-xl">{project?.title}</h4>
-            <div className="flex gap-2 mt-1 flex-wrap">
+            <p className="text-sm text-gray-600 mt-1">{project?.objective}</p>
+            <div className="flex gap-2 mt-2 flex-wrap">
               <span className="bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full text-xs font-medium">
                 {project?.industry}
               </span>
               <span className="bg-purple-100 text-purple-600 px-2 py-0.5 rounded-full text-xs font-medium">
                 {project?.application}
               </span>
+              
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <span
-              className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                project?.status === "pending"
-                  ? "bg-yellow-100 text-yellow-700"
-                  : "bg-green-100 text-green-700"
-              }`}
-            >
-              {project?.status?.replace(project?.status[0], project?.status[0].toUpperCase())}
-            </span>
+          <div className="flex items-start gap-2">
             <TiDelete
-              onClick={() => handleDelete(projId)}
-              className="text-md cursor-pointer w-fit h-fit inline-block  text-red-600 hover:text-red-700"
-              />
+              onClick={() => handleDelete(projectId)}
+              className="text-xl cursor-pointer text-red-600 hover:text-red-700 mt-1"
+            />
           </div>
         </CardHeader>
 
         {/* Body */}
         <CardBody className="p-4 space-y-3">
+
+          {project?.type && (
+            <p className="text-sm flex items-center gap-2 text-gray-600">
+              <IoReceipt /> Project Type : {project?.type}
+            </p>
+          )}
+
           {/* Location */}
-          <p className="text-sm flex items-center gap-2 text-gray-600">
-            <IoLocation /> {project?.location}
-          </p>
-          {/* Type */}
-          <p className="text-sm flex items-center gap-2 text-gray-600">
-            <TbDeviceRemote /> {project?.type}
-          </p>
-          {/* Range */}
-          <p className="text-sm flex items-center gap-2 text-gray-600">
-            <GiDeliveryDrone /> {project?.rangeCovered}
-            {project?.type?.toLowerCase().includes("linear") ? " km" : " acres"}
-          </p>
+          {project?.location && (
+            <p className="text-sm flex items-center gap-2 text-gray-600">
+              <IoLocation /> Location : {project?.location}
+            </p>
+          )}
+          
+          {/* Tools */}
+          {project?.tools && (
+            <p className="text-sm flex items-center gap-2 text-gray-600">
+              <FaTools /> Tools : {project?.tools}
+            </p>
+          )}
+          
           {/* Budget */}
           {project?.budget && (
             <p className="text-sm flex items-center gap-2 text-gray-600">
-              <IoPricetag /> ₹{project?.budget.toLocaleString()}
+              <IoPricetag />Budget :  ₹{project?.budget} 
             </p>
           )}
-          {/* Dates */}
-          <p className="text-xs flex items-center gap-2 text-gray-500">
-            <FaClockRotateLeft /> {formatDate(project?.startDate)} - {formatDate(project?.endDate)}
-          </p>
-          {/* Description */}
-          {project?.description && (
-            <p className="text-sm text-gray-700 line-clamp-3">{project?.description}</p>
+          
+          {/* Range Covered */}
+          {project?.rangeCovered && (
+            <p className="text-sm flex items-center gap-2 text-gray-600">
+              <FaTasks /> Range Covered : {project?.rangeCovered} {project?.type?.includes("linear") ? "km" : "acres/km²"}
+            </p>
           )}
+          
+          {/* Dates */}
+          <div className="flex justify-between text-xs text-gray-500">
+            {project?.startDate && (
+              <p className="flex items-center gap-1">
+                <IoCalendar /> Start Date : {formatDate(project?.startDate)}
+              </p>
+            )}
+            {project?.endDate && (
+              <p className="flex items-center gap-1">
+                <IoCalendar /> End Date : {formatDate(project?.endDate)}
+              </p>
+            )}
+          </div>
+          
+          {/* Scope */}
+          {project?.scope && (
+            <p className="text-sm text-gray-700 line-clamp-3">Project Scope : {project?.scope}</p>
+          )}
+          {project?.phoneNumber && (
+  <p className="text-sm text-gray-700 line-clamp-3">
+    Phone No :{" "}
+    <a href={`tel:${project.phoneNumber}`} className="text-blue-600 underline">
+      {project.phoneNumber}
+    </a>
+  </p>
+)}
+
+{project?.email && (
+  <p className="text-sm text-gray-700 line-clamp-3">
+    Email :{" "}
+    <a href={`mailto:${project.email}`} className="text-blue-600 underline">
+      {project.email}
+    </a>
+  </p>
+)}
+
+
+          
           {/* File */}
           {project?.fileUrl && (
             <a
               href={project.fileUrl}
               download
               target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center gap-1 text-blue-600 hover:text-blue-800 text-sm font-medium"
             >
-              <MdFileDownload /> Download File
+              <MdFileDownload /> Project File (KML/KMZ)
             </a>
           )}
 
-          {/* Image */}
-          <div className="overflow-visible py-2">
+          {/* Image with improved styling */}
+          <div className="overflow-hidden rounded-xl mt-3 relative">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent z-10 rounded-xl"></div>
             <Image
-              alt="Card background"
-              className="object-cover rounded-xl "
+              alt="project background"
+              className="object-cover h-48 w-full transition-transform duration-300 hover:scale-105"
               src={imageUrl}
-              width={270}
+              onError={() => setImageError(true)}
             />
+            
           </div>
         </CardBody>
       </Card>

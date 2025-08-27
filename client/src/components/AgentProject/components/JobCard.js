@@ -4,6 +4,7 @@ import { IoLocation, IoPricetag, IoBusiness } from "react-icons/io5";
 import { FaClockRotateLeft, FaUserTie } from "react-icons/fa6";
 import { Card, CardHeader, CardBody, Image, Avatar } from "@nextui-org/react";
 import { TiDelete } from "react-icons/ti";
+import { IoIosPeople } from "react-icons/io";
 import { MdFileDownload } from "react-icons/md";
 import dayjs from "dayjs";
 import DelModal from "../../smallComponents/DelModal";
@@ -37,7 +38,7 @@ const JobCard = ({ job, jobId, handleDelete }) => {
   const companyLogo = job?.companyLogo && !logoError ? job.companyLogo : defaultCompanyLogo;
 
   return (
-    <>
+     <>
       <DelModal isOpen={isModalOpen} handleDelete={confirmDelete} handleClose={closeModal} />
           
       <Card className="relative hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border rounded-xl overflow-hidden w-full max-w-md">
@@ -61,9 +62,7 @@ const JobCard = ({ job, jobId, handleDelete }) => {
               <span className="bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full text-xs font-medium">
                 {job?.industrytype}
               </span>
-              <span className="bg-purple-100 text-purple-600 px-2 py-0.5 rounded-full text-xs font-medium">
-                {job?.jobtype}
-              </span>
+              
               <span className="bg-green-100 text-green-600 px-2 py-0.5 rounded-full text-xs font-medium">
                 {job?.category}
               </span>
@@ -79,22 +78,27 @@ const JobCard = ({ job, jobId, handleDelete }) => {
 
         {/* Body */}
         <CardBody className="p-4 space-y-3">
+
+          <p className="text-sm flex items-center gap-2 text-gray-600">
+               <IoIosPeople/> Job Type: {job?.jobtype}
+              </p>
           {/* Location */}
           <p className="text-sm flex items-center gap-2 text-gray-600">
-            <IoLocation /> {job?.location}
+            <IoLocation /> Location: {job?.location}
           </p>
+
           
           {/* Salary */}
           {job?.salary && (
             <p className="text-sm flex items-center gap-2 text-gray-600">
-              <IoPricetag /> {job?.salary}
+              <IoPricetag /> Salary: {job?.salary}
             </p>
           )}
           
           {/* Subtitle (Skills/Keywords) */}
           {job?.subtitle && (
             <p className="text-sm flex items-center gap-2 text-gray-600">
-              <FaUserTie /> {job?.subtitle}
+              <FaUserTie /> Subtitle: {job?.subtitle}
             </p>
           )}
           
@@ -110,33 +114,25 @@ const JobCard = ({ job, jobId, handleDelete }) => {
             <p className="text-sm text-gray-700 line-clamp-3">{job?.jobsummary}</p>
           )}
           
-          {/* File
-          {job?.fileUrl && (
-            <a
-              href={job.fileUrl}
-              download
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 text-blue-600 hover:text-blue-800 text-sm font-medium"
-            >
-              <MdFileDownload /> Job Description PDF
-            </a>
-          )} */}
+          {job?.phoneNumber && (
+  <p className="text-sm text-gray-700 line-clamp-3">
+    Phone No :{" "}
+    <a href={`tel:${job?.phoneNumber}`} className="text-blue-600 underline">
+      {job?.phoneNumber}
+    </a>
+  </p>
+)}
 
-          {/* Image with improved styling */}
-          <div className="overflow-hidden rounded-xl mt-3 relative">
-            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent z-10 rounded-xl"></div>
-            <Image
-              alt="industry background"
-              className="object-cover h-48 w-full transition-transform duration-300 hover:scale-105"
-              src={industryImageUrl}
-              onError={() => setImageError(true)}
-            />
-            <div className="absolute bottom-3 left-3 z-20 text-white">
-              <p className="text-sm font-semibold">{job?.companyname}</p>
-              <p className="text-xs">{job?.industrytype}</p>
-            </div>
-          </div>
+{job?.email && (
+  <p className="text-sm text-gray-700 line-clamp-3">
+    Send CV/Resume here :{" "}
+    <a href={`mailto:${job?.email}`} className="text-blue-600 underline">
+      {job?.email}
+    </a>
+  </p>
+)}
+
+
         </CardBody>
       </Card>
     </>

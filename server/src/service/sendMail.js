@@ -3,8 +3,8 @@ import nodemailer from "nodemailer";
 const sendEmail = async (options) => {
     try {
         const transporter = nodemailer.createTransport({
-           // host: 'mail.aero2astro.com', 
-            host: 'smtp.gmail.com', 
+            host: 'mail.aero2astro.com', 
+            //host: 'smtp.gmail.com', 
             port: 465, 
             secure: true, 
             auth: {

@@ -25,6 +25,8 @@ const AddProject = ({ setIsOpen, getAllProj, setAgentProj }) => {
     tools: "Phantom-4-pro",
     scope: "",
     budget: "",
+    phoneNumber: "",
+    email: "",
   });
 
   const [selectedFile, setSelectedFile] = useState(null);
@@ -41,14 +43,19 @@ const AddProject = ({ setIsOpen, getAllProj, setAgentProj }) => {
     setSelectedFile(e.target.files[0] || null);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // if (!formData.tag) {
-    //   toast.error("Tag is required");
-    //   return;
-    // }
-    if (Number(formData.rangeCovered) <= 0) {
+  const validateInputs = () => {
+      const phoneRegex = /^[0-9]{10}$/;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+      if (!phoneRegex.test(formData.phoneNumber)) {
+        toast.error("Please enter a valid 10-digit phone number");
+        return false;
+      }
+      if (!emailRegex.test(formData.email)) {
+        toast.error("Please enter a valid email address");
+        return false;
+      }
+      if (Number(formData.rangeCovered) <= 0) {
       toast.error("Range Covered must be a positive number");
       return;
     }
@@ -56,6 +63,14 @@ const AddProject = ({ setIsOpen, getAllProj, setAgentProj }) => {
       toast.error("End Date cannot be before Start Date");
       return;
     }
+  
+      return true;
+    };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if(!validateInputs()) return;
 
     const token = cookies.get("auth");
     if (!token) {
@@ -241,6 +256,36 @@ const AddProject = ({ setIsOpen, getAllProj, setAgentProj }) => {
           </div>
         </div>
 
+         <div className="grid md:grid-cols-2 gap-4">
+          <div>
+            <label className="font-medium text-gray-700">
+              Phone Number <RequiredStar />
+            </label>
+            <input
+              name="phoneNumber"
+              value={formData.phoneNumber}
+              required
+              placeholder="Enter 10-digit phone number"
+              className={inputClass}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label className="font-medium text-gray-700">
+              Email <RequiredStar />
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              required
+              placeholder="Enter valid email address"
+              className={inputClass}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+
         {/* Dates */}
         <div className="grid md:grid-cols-2 gap-4">
           <div>
@@ -256,7 +301,7 @@ const AddProject = ({ setIsOpen, getAllProj, setAgentProj }) => {
         {/* Submit */}
         <div className="pt-4">
           <button type="submit" disabled={loader}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition disabled:opacity-50">
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition disabled:opacity-50 mb-5">
             {loader ? "Adding..." : "Add Project"}
           </button>
         </div>
